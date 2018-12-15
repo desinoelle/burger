@@ -17,13 +17,39 @@ router.get("/", function(req, res) {
 
 // Post new burger route
 router.post("/api/burgers", function(req, res) {
-  burger.insertOne([
-    "burger_name"
-  ], [
-    req.body.burger_name
-  ], function(result) {
-    // Send back the ID of the newburger
+  burger.insertOne( ["burger_name"], [req.body.burger_name], function(result) {
+    // Send back the ID of the new burger
     res.json({ id: result.insertId });
+  });
+});
+
+// Update burger to devoured state
+router.put("/api/burgers/:id", function(req, res) {
+  var condition = "id = " + req.params.id;
+
+  burger.updateOne( {devoured: req.body.devoured}, condition, function(result) {
+    // In case id does not exist
+    if (result.changedRows == 0) {
+      return res.status(404).end();
+    } 
+    else {
+      res.status(200).end();
+    }
+  });
+});
+
+// Delete a burger after devoured
+router.delete("/api/burgers/:id", function(req, res) {
+  var condition = "id = " + req.params.id;
+
+  burger.deleteOne(condition, function(result) {
+    // In case id does not exist
+    if (result.affectedRows == 0) {
+      return res.status(404).end();
+    } 
+    else {
+      res.status(200).end();
+    }
   });
 });
   
