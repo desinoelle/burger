@@ -21,4 +21,8 @@ $(function() {
         console.log("Give your burger a name first!");
       }
     });
+
+    $(".devour").on("click", function(event) {
+
+    });
 });
